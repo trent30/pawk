@@ -1,133 +1,80 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>pawk</title>
 	<meta name='Generator' content='Zim 0.65'>
 	<style type='text/css'>
-		a {
-			text-decoration: none
-		}
-
-		a:hover {
-			text-decoration: underline
-		}
-
-		a:active {
-			text-decoration: underline
-		}
-
-		strike {
-			color: grey
-		}
-
-		u {
-			text-decoration: none;
-			background-color: yellow
-		}
-
-		tt {
-			color: #2e3436;
-		}
-
-		pre {
-			color: #2e3436;
-			margin-left: 20px
-		}
-
-		h1 {
-			text-decoration: underline;
-			color: #000000;
-			margin-bottom: 0
-		}
-
-		h2 {
-			color: #000000;
-			margin-bottom: 0
-		}
-
-		h3 {
-			color: #000000;
-			margin-bottom: 0
-		}
-
-		h4 {
-			color: #000000;
-			margin-bottom: 0
-		}
-
-		h5 {
-			color: #000000;
-			margin-bottom: 0
-		}
-
-		p {
-			margin-top: 0
-		}
-
+		a          { text-decoration: none      }
+		a:hover    { text-decoration: underline }
+		a:active   { text-decoration: underline }
+		strike     { color: grey                }
+		u          { text-decoration: none;
+					 background-color: yellow   }
+		tt         { color: #2e3436;            }
+		pre        { color: #2e3436;
+					 margin-left: 20px          }
+		h1         { text-decoration: underline;
+					 color: #000000; margin-bottom: 0 }
+		h2         { color: #000000; margin-bottom: 0 }
+		h3         { color: #000000; margin-bottom: 0 }
+		h4         { color: #000000; margin-bottom: 0 }
+		h5         { color: #000000; margin-bottom: 0 }
+		p          { margin-top: 0              }
 		span.zim-tag {
 			color: #ce5c00;
 		}
-
 		div.zim-object {
-			border-style: solid;
-			border-width: 1px;
+			border-style:solid;
+			border-width:1px;
 		}
-
-		ul {
-			list-style-image: none
-		}
-
+		
+		ul {list-style-image: none}
 		/* ul rule needed to reset style for sub-bullets */
 	</style>
 </head>
-
 <body>
 
-	<!-- Wiki content -->
+<!-- Wiki content -->
 
 	<h1>pawk</h1>
 
-	<br>
-	<br>
+<br>
+<br>
 
-	<h2>Description</h2>
+<h2>Description</h2>
 
-	<br>
+<br>
 
-	<p>
-		Pawk is a WYSIWYG tool to generate bash scripts very quickly and without pain.
-		<br> Usually, one can do all that they want with a few commands and pipes, but often waste a lot of time figuring out how to
-		arrange commands, and what the appropriate parameters are for each of them. Especially when not familiar with awk.
-	</p>
+<p>
+Pawk is a WYSIWYG tool to generate bash script very quickly and without pain.<br>
+Usually, one can do all that they want with a few commands and pipes, but often waste a lot of time figuring out how to arrange commands, and what the appropriate parameters are for each of them. Especially when not familiar with awk.
+</p>
 
-	<p>
-		For instance, if you want to compute the sum of field 10 in access.log, just open the file with pawk and press 'a', 's',
-		'm', '10' and &lt;ENTER&gt;. That's it. You have the result and the script is automatically generated:
-		<br> « cat access.log | awk '{ print $10 }' | sed s/^$/0/g | awk 'BEGIN{RS="\n";ORS="+"}{if (RT=="") printf "%s",$0; else print}'
-		| sed "s/+$/\n/g" | bc »
-	</p>
+<p>
+For instance, if you want to compute the sum of field 10 in access.log, just open the file with pawk and press 'a', 's', 'm', '10' and &lt;ENTER&gt;. That's it. You have the result and the script is automatically generated: <br>
+« cat access.log | awk '{ print $10 }' | sed s/^$/0/g | awk 'BEGIN{RS="\n";ORS="+"}{if (RT=="") printf "%s",$0; else print}' | sed "s/+$/\n/g" | bc »
+</p>
 
-	<p>
-		Now you can impress your friends and colleagues with ugly pipes.
-	</p>
+<p>
+Now you can impress your friends and colleagues with ugly pipes.
+</p>
 
-	<h2>Usage</h2>
+<h2>Usage</h2>
 
-	<br>
+<br>
 
-	<p>
-		python pawk.py [FILE...]
-	</p>
+<p>
+python pawk.py [FILE...]
+</p>
 
-	<br>
+<br>
 
-	<h2>Shortcuts</h2>
+<h2>Shortcuts</h2>
 
-	<br>
+<br>
 
-	<pre>
+<pre>
  Commands :
 	a : advanced commands
 	c : cut -c&lt;Start&gt;-&lt;End&gt;
@@ -139,9 +86,9 @@
 	i : insert a custom command
 </pre>
 
-	<br>
+<br>
 
-	<pre>
+<pre>
  awk :
 	f : select several fields
 	l : grep one line by its number
@@ -150,12 +97,12 @@
 	L : change line separator
 </pre>
 
-	<br>
+<br>
 
-	<pre>
+<pre>
  Misc :
 	e : edit script
-	n : show/hide line numbers
+	n : show/hide line numbers 
 	r : redo
 	u : undo
 	/ : search
@@ -163,76 +110,74 @@
 	q : quit
 </pre>
 
-	<br>
+<br>
 
-	<h2>Examples</h2>
+<h2>Examples</h2>
 
-	<br>
+<br>
 
-	<h3>Select fields</h3>
+<h3>Select fields</h3>
 
-	<br>
+<br>
 
-	<p>
-		python pawk.py /etc/passwd
-	</p>
+<p>
+python pawk.py /etc/passwd
+</p>
 
-	<div class="zim-object">
-		<pre>
-root:x:0:0:root:/root:/bin/bash
-daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
-bin:x:2:2:bin:/bin:/usr/sbin/nologin
+<div class="zim-object">
+<pre>
+root:x:0:0:root:/root:/bin/bash 
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin 
+bin:x:2:2:bin:/bin:/usr/sbin/nologin 
 sys:x:3:3:sys:/dev:/usr/sbin/nologin
 </pre>
-	</div>
+</div>
 
-	<br>
+<br>
 
-	<p>
-		Press 'f' (like field) :
-	</p>
-	<div class="zim-object">
-		<pre>
-                            1                             |                     2                     |
+<p>
+Press 'f' (like field) :
+</p>
+<div class="zim-object">
+<pre>
+                            1                             |                     2                     | 
 -------------------------------------------------------------------------------------------------------
-root:x:0:0:root:/root:/bin/bash                           |
-daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin           |
-bin:x:2:2:bin:/bin:/usr/sbin/nologin                      |
-sys:x:3:3:sys:/dev:/usr/sbin/nologin                      |
+root:x:0:0:root:/root:/bin/bash                           |                    
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin           |  
+bin:x:2:2:bin:/bin:/usr/sbin/nologin                      |  
+sys:x:3:3:sys:/dev:/usr/sbin/nologin                      |  
 
 Column : 1 | Actuals fields are : [] | a : append | r : remove last one | m : manually | F : field separator | q : quit
 </pre>
-	</div>
+</div>
 
-	<br>
+<br>
 
-	<p>
-		As we can see, all the data is in the first field. Indeed, the field separator is &lt;space&gt; by default. To change it
-		to colon (:), just press 'F' (like Field Separator).
-	</p>
+<p>
+As we can see, all the data is in the first field. Indeed, the field separator is &lt;space&gt; by default. To change it to colon (:), just press 'F' (like Field Separator).
+</p>
 
-	<div class="zim-object">
-		<pre>
-        1        |2|  3  |  4  |                5                 |          6          |        7        |
+<div class="zim-object">
+<pre>
+        1        |2|  3  |  4  |                5                 |          6          |        7        | 
 -----------------------------------------------------------------------------------------------------------
 root             |x|0    |0    |root                              |/root                |/bin/bash        |
-daemon           |x|1    |1    |daemon                            |/usr/sbin            |/usr/sbin/nologin|
-bin              |x|2    |2    |bin                               |/bin                 |/usr/sbin/nologin|
+daemon           |x|1    |1    |daemon                            |/usr/sbin            |/usr/sbin/nologin| 
+bin              |x|2    |2    |bin                               |/bin                 |/usr/sbin/nologin| 
 sys              |x|3    |3    |sys                               |/dev                 |/usr/sbin/nologin|
 
 Column : 1 | Actuals fields are : [] | a : append | r : remove last one | m : manually | F : field separator | q : quit
 </pre>
-	</div>
+</div>
 
-	<br>
+<br>
 
-	<p>
-		Now we obtain correct headers numbers, and we can append all the fields we want with the left or right arrows.
-		<br> We can append manually (just press 'm') a huge number of fields even more quickly with range '-' and the wildcard character
-		'*':
-	</p>
-	<div class="zim-object">
-		<pre>
+<p>
+Now we obtain correct headers numbers, and we can append all the fields we want with the left or right arrows. <br>
+We can append manually (just press 'm') a huge number of fields even more quickly with range '-' and the wildcard character '*':
+</p>
+<div class="zim-object">
+<pre>
 ┌───────────────────────────────────────────────────┐
 │                                                   │
 │ Enter the list of fields                          │
@@ -243,49 +188,47 @@ Column : 1 | Actuals fields are : [] | a : append | r : remove last one | m : ma
 │ * -4 -7   : all fields except the 4th and the 7th │
 └───────────────────────────────────────────────────┘
 </pre>
-	</div>
+</div>
 
-	<br>
+<br>
 
-	<p>
-		With '* -2', the status bar indicates that the fields 1, 3, 4, 5, 6 and 7 are selected:
-	</p>
-	<div class="zim-object">
-		<pre>
+<p>
+With '* -2', the status bar indicates the fields 1, 3, 4, 5, 6 and 7 are selected:
+</p>
+<div class="zim-object">
+<pre>
 
 Column : 1 | Actuals fields are : [1, 3, 4, 5, 6, 7] | a : append | r : remove last one | m : manually | F : field separator | q : quit
 </pre>
-	</div>
+</div>
 
-	<br>
+<br>
 
-	<p>
-		Ok, we have all the fields we want, now we can quit with 'q' to watch the result :
-	</p>
-	<div class="zim-object">
-		<pre>
-root:0:0:root:/root:/bin/bash
-daemon:1:1:daemon:/usr/sbin:/usr/sbin/nologin
-bin:2:2:bin:/bin:/usr/sbin/nologin
-sys:3:3:sys:/dev:/usr/sbin/nologin
+<p>
+Ok, we have all the fields we want, now we can quit with 'q' to watch the result :
+</p>
+<div class="zim-object">
+<pre>
+root:0:0:root:/root:/bin/bash 
+daemon:1:1:daemon:/usr/sbin:/usr/sbin/nologin 
+bin:2:2:bin:/bin:/usr/sbin/nologin 
+sys:3:3:sys:/dev:/usr/sbin/nologin 
 sync:4:65534:sync:/bin:/bin/sync
 </pre>
-	</div>
+</div>
 
-	<br>
+<br>
 
-	<p>
-		We can continue to run commands on the last result and so on, like a pipe, but we can watch each intermediate result, so
-		we don't waste time trying and retrying, and modifying a long command line to fix a little bug ( « oh 'cut -c20-27' was
-		wrong so 'cut -c20-28' should work... Let's try again and rerun all this shitstorm » ).
-	</p>
+<p>
+We can continue to run commands on the last result and so on, like a pipe, but we can watch each intermediate result, so we don't waste time trying and retrying, and modifying a long command line to fix a little bug ( « oh 'cut -c20-27' was wrong so 'cut -c20-28' should work... Let's try again and rerun all this shitstorm » ).
+</p>
 
-	<p>
-		The script to obtain the last result can be viewed with 'e' (like edit):
-	</p>
-	<div class="zim-object">
-		<pre>
-Command list :
+<p>
+The script to obtain the last result can be viewed with 'e' (like edit):
+</p>
+<div class="zim-object">
+<pre>
+Command list :  
 
 1 : cat /etc/passwd
 2 : awk 'BEGIN{FS=":";}{ print $1":"$3":"$4":"$5":"$6":"$7 }'
@@ -299,93 +242,91 @@ awk 'BEGIN{FS=":";}{ print $1":"$3":"$4":"$5":"$6":"$7 }' /etc/passwd | head -n 
 
 q : quit | u : undo | r : redo | s : save script
 </pre>
-	</div>
+</div>
 
-	<br>
+<br>
 
-	<p>
-		Each command can be undone or redone to quickly retry if you miss something. The data are cached so it should be instantaneous.
-		<br> When you save the script, the shebang is automatically added and the file is automatically executable (because we always
-		forget to 'chmod +x').
-	</p>
+<p>
+Each command can be undone or redone to quickly retry if you miss something. The data is cached so it should be instantaneous. <br>
+When you save the script, the shebang is automatically added and the file is automatically executable (because we always forget to 'chmod +x').
+</p>
 
-	<p>
-		When you quit the program, a popup asks what we want to do.
-	</p>
-	<div class="zim-object">
-		<pre>
-┌───────────────────────────────────┐
-│                                   │
-│              Quit ?               │
-│                                   │
-│ a : abort                         │
-│ d : save data in file             │
-│ s : save script in file           │
-│ p : print data to standard output │
-│ q : quit                          │
-│                                   │
+<p>
+When you quit the program, a popup asks what we want to do.
+</p>
+<div class="zim-object">
+<pre>
+┌───────────────────────────────────┐                                                                              
+│                                   │                                                                              
+│              Quit ?               │                                                                              
+│                                   │                                                                              
+│ a : abort                         │                                                                              
+│ d : save data in file             │                                                                              
+│ s : save script in file           │                                                                              
+│ p : print data to standard output │                                                                              
+│ q : quit                          │                                                                               
+│                                   │                                                                              
 └───────────────────────────────────┘
 </pre>
-	</div>
+</div>
 
-	<p>
-		So we shouldn't lose work.
-	</p>
+<p>
+So we shouldn't lose work.
+</p>
 
-	<h3>Sort</h3>
+<h3>Sort</h3>
 
-	<br>
+<br>
 
-	<p>
-		With 'o' we can sort by fields. After the fields selection, we can also add parameters to the sort command. A brief reminder
-		is displayed, because we are always mistaken between '-r' and '-R'.
-	</p>
-	<div class="zim-object">
-		<pre>
-┌───────────────────────────────────┐
-│                                   │
-│ sort options :                    │
-│                                   │
-│ -d, --dictionary-order            │
-│ -f, --ignore-case                 │
-│ -M, --month-sort                  │
-│ -h, --human-numeric-sort          │
-│ -n, --numeric-sort                │
-│ -R, --random-sort                 │
-│ -r, --reverse                     │
-│                                   │
+<p>
+With 'o' we can sort by fields. After the fields selection, we can also add parameters to the sort command. A brief reminder is displayed, because we are always mistaken between '-r' and '-R'.
+</p>
+<div class="zim-object">
+<pre>
+┌───────────────────────────────────┐                                                                              
+│                                   │                                                                              
+│ sort options :                    │                                                                              
+│                                   │                                                                              
+│ -d, --dictionary-order            │                                                                              
+│ -f, --ignore-case                 │                                                                              
+│ -M, --month-sort                  │                                                                              
+│ -h, --human-numeric-sort          │                                                                              
+│ -n, --numeric-sort                │  
+│ -R, --random-sort                 │   
+│ -r, --reverse                     │                                                                           
+│                                   │                                                                              
 └───────────────────────────────────┘
 </pre>
-	</div>
+</div>
 
-	<br>
+<br>
 
-	<h3>Select fields with condition</h3>
+<h3>Select fields with condition</h3>
 
-	<br>
+<br>
 
-	<p>
-		python pawk.py /tmp/birth
-	</p>
+<p>
+python pawk.py /tmp/birth
+</p>
 
-	<div class="zim-object">
-		<pre>
-1
-2 Bart
+<div class="zim-object">
+<pre>
+1 
+2 Bart 
 3 23/02
-4
+4 
 5 Homer
 6 18/06
 </pre>
-	</div>
+</div>
 
-	<br>
+<br>
 
-	<p>
-		If we want only the line with name, we can use the « where » command ('w') :
-	</p>
-	<div class="zim-object">
-		<pre>
+<p>
+If we want only the line with name, we can use the « where » command ('w') :
+</p>
+<div class="zim-object">
+<pre>
  ┌────────────────────────────────────────────────────────────────┐
  │                                                                │
  │                       "where" condition.                       │
@@ -399,90 +340,90 @@ q : quit | u : undo | r : redo | s : save script
  └────────────────────────────────────────────────────────────────┘
 
 </pre>
-	</div>
+</div>
 
-	<p>
-		(n+1)%3==0
-	</p>
+<p>
+(n+1)%3==0
+</p>
 
-	<div class="zim-object">
-		<pre>
-1 Bart
+<div class="zim-object">
+<pre>
+1 Bart   
 2 Homer
 </pre>
-	</div>
+</div>
 
-	<p>
-		Now we only have every third line.
-	</p>
+<p>
+Now we only have every third line.
+</p>
 
-	<br>
+<br>
 
-	<h3>Substitute</h3>
+<h3>Substitute</h3>
 
-	<br>
+<br>
 
-	<p>
-		The 's' command uses awk to substitute, to use regex we can call another command with 'i' (insert a custom command) on:
-	</p>
-	<div class="zim-object">
-		<pre>
+<p>
+The 's' command uses awk to substitute, to use regex we can call another command with 'i' (insert a custom command) on:
+</p>
+<div class="zim-object">
+<pre>
 libc6
 libcairo2
 libgcc1
 </pre>
-	</div>
+</div>
 
-	<br>
+<br>
 
-	<p>
-		sed s/^/_/g
-	</p>
-	<div class="zim-object">
-		<pre>
+<p>
+sed s/^/_/g
+</p>
+<div class="zim-object">
+<pre>
 _libc6
 _libcairo2
 _libgcc1
 </pre>
-	</div>
+</div>
 
-	<br>
+<br>
 
-	<p>
-		sed s/$/_/g
-	</p>
-	<div class="zim-object">
-		<pre>
+<p>
+sed s/$/_/g
+</p>
+<div class="zim-object">
+<pre>
 _libc6_
 _libcairo2_
 _libgcc1_
 </pre>
-	</div>
+</div>
 
-	<br>
+<br>
 
-	<p>
-		tr '\n' ';'
-	</p>
-	<div class="zim-object">
-		<pre>
+<p>
+tr '\n' ';'
+</p>
+<div class="zim-object">
+<pre>
 _libc6_;_libcairo2_;_libgcc1_;
 </pre>
-	</div>
+</div>
 
-	<br>
+<br>
 
-	<h3>Advanced commands</h3>
+<h3>Advanced commands</h3>
 
-	<br>
+<br>
 
-	<p>
-		The 'a' shortcut displays the advanced commands menu:
-	</p>
+<p>
+The 'a' shortcut displays the advanced commands menu:
+</p>
 
-	<div class="zim-object">
-		<pre>
-ADVANCED COMMANDS
+<div class="zim-object">
+<pre>
+ADVANCED COMMANDS 
 
 a : append a field
 i : insert the line number on the first field
@@ -492,139 +433,140 @@ t : transpose
 m : compute the mean
 h : histogram
 </pre>
-	</div>
+</div>
 
-	<br>
+<br>
 
-	<h4>Append a field</h4>
+<h4>Append a field</h4>
 
-	<div class="zim-object">
-		<pre>
+<div class="zim-object">
+<pre>
 12 2
 20 4
 50 6
 </pre>
-	</div>
+</div>
 
-	<p>
-		Like a spreadsheet, we can do operations on the new field: $1+$2
-	</p>
-	<div class="zim-object">
-		<pre>
+<br>
+
+<p>
+Like a spreadsheet, we can do operations on the new field: $1+$2
+</p>
+<div class="zim-object">
+<pre>
 12 2 14
 20 4 24
 50 6 56
 </pre>
-	</div>
+</div>
 
-	<br>
+<br>
 
-	<h4>Transpose</h4>
+<h4>Transpose</h4>
 
-	<div class="zim-object">
-		<pre>
+<div class="zim-object">
+<pre>
 12 20 50
 2 4 6
 14 24 56
 </pre>
-	</div>
+</div>
 
-	<br>
+<br>
 
-	<h4>Count occurrences</h4>
+<h4>Count occurrences</h4>
 
-	<p>
-		It's like a "SELECT field, count(*) FROM file GROUP BY field;"
-	</p>
+<p>
+It's like a "SELECT field, count(*) FROM file GROUP BY field;"
+</p>
 
-	<p>
-		For instance, if we apply « count command » 'c' with field 7 on /etc/password :
-	</p>
-	<div class="zim-object">
-		<pre>
+<p>
+For instance, if we apply « count command » 'c' with field 7 on /etc/password :
+</p>
+<div class="zim-object">
+<pre>
 /bin/bash:5
 /bin/false:34
 /bin/sh:2
 /bin/sync:1
 /usr/sbin/nologin:18
 </pre>
-	</div>
+</div>
 
-	<br>
+<br>
 
-	<h4>Histogram</h4>
+<h4>Histogram</h4>
 
-	<br>
+<br>
 
-	<p>
-		We can also display a histogram 'h' of field 2 :
-	</p>
-	<div class="zim-object">
-		<pre>
+<p>
+We can also display a histogram 'h' of field 2 :
+</p>
+<div class="zim-object">
+<pre>
 *****
 **********************************
 **
 *
 ******************
 </pre>
-	</div>
+</div>
 
-	<br>
+<br>
 
-	<p>
-		The histogram can be scaled to a boundary. In this case all the values are increased or decreased by the same ratio, thus
-		the maximum value will touch the boundary.
-		<br> Here the same histogram with a boundary at 80:
-	</p>
-	<div class="zim-object">
-		<pre>
+<p>
+The histogram can be scaled to a boundary. In this case all the values are increased or decreased by the same ratio, thus the maximum value will touch the boundary. <br>
+Here the same histogram with a boundary at 80:
+</p>
+<div class="zim-object">
+<pre>
 ************
 *********************************************************************************
 *****
 ***
 *******************************************
 </pre>
-	</div>
+</div>
 
-	<br>
+<br>
 
-	<h4>Sum</h4>
+<h4>Sum</h4>
 
-	<div class="zim-object">
-		<pre>
+<div class="zim-object">
+<pre>
 10
 10
 
 10
 10
 </pre>
-	</div>
+</div>
 
-	<p>
-		Just compute the sum of a field, empty lines are automatically replaced by 0.
-	</p>
-	<div class="zim-object">
-		<pre>
+<p>
+Just compute the sum of a field, empty lines are automatically replaced by 0.
+</p>
+<div class="zim-object">
+<pre>
 40
 </pre>
-	</div>
+</div>
 
-	<br>
+<br>
 
-	<h4>Mean</h4>
+<h4>Mean</h4>
 
-	<div class="zim-object">
-		<pre>
+<div class="zim-object">
+<pre>
 8.0000000000
 </pre>
-	</div>
+</div>
 
-	<p>
-		Why it is not 10? Because line 3 is empty.
-	</p>
+<p>
+Why it is not 10? Because line 3 is empty.
+</p>
 
 
-	<!-- End wiki content -->
+<!-- End wiki content -->
 
 </body>
 

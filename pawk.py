@@ -324,7 +324,7 @@ def print_script():
 		if len(CMD_LIST) == 0:
 			statusBar("There is no command.")
 			return
-		msg = "\nCommands list :\n\n"
+		msg = "\nCommand list :\n\n"
 		n = 1
 		for i in CMD_LIST:
 			msg += str(n) + " : " + i + "\n"
