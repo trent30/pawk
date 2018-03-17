@@ -783,6 +783,10 @@ def padding(l):
 	r = TextBoxInput(["length ?"])
 	run("awk", "'%s{ p=\"\"; for (i = 1; i <= %s - length($%i); i++) { p = p\" \" }; print %s}'" % (awk_begin(), r, l, l2) )
 
+def auto_padding():
+	param = "'%s{for (i=1; i<=NF; i++) { if (length($i)>max[i]) {max[i]=length($i);}data[l]=$i;l++;}}END {d = 0;for (l=0; l<NR; l++) {for (c=1; c<=NF; c++) {p=\"\"; for (j=0; j < (max[c]-length(data[d])); j++) { p = p\" \";}printf \"%%s%%s\", p, data[d];if (c!=NF) {printf \"%%s\", FS;}d++;}print \"\";}}'" % awk_begin("l=0;")
+	run("awk", param)
+	
 def advanced_commands():
 	msg = """
 	ADVANCED COMMANDS
@@ -793,6 +797,7 @@ def advanced_commands():
 	i : insert the line number on the first field
 	m : compute the mean
 	p : padding
+	P : auto padding all fields
 	s : sum values on selected field
 	t : transpose
 	
@@ -840,6 +845,10 @@ def advanced_commands():
 			if len( f ) == 0:
 				return
 			padding( f[0] )
+			return
+		
+		if c == ord('P'):
+			auto_padding()
 			return
 		
 		if c == ord('h'):

@@ -429,6 +429,8 @@ a : append a field
 i : insert the line number on the first field
 c : count occurrences on selected field
 s : sum values on selected field
+p : padding
+P : auto padding all fields
 t : transpose
 m : compute the mean
 h : histogram
@@ -477,14 +479,30 @@ Like a spreadsheet, we can do operations on the new field: $1+$2
 <h4>Padding</h4>
 
 <p>
-We can align on left or right with specific width:
+We can align on left or right with specific width. Here, $1 on right and width=6, and $5 on left and width=10:
 </p>
 <div class="zim-object">
 <pre>
-      root:x:0:0:   root:     /root:          /bin/bash
-    daemon:x:1:1: daemon: /usr/sbin:  /usr/sbin/nologin
-       bin:x:2:2:    bin:      /bin:  /usr/sbin/nologin
-       sys:x:3:3:    sys:      /dev:  /usr/sbin/nologin
+  root:x:0:0:root      :/root:/bin/bash                                  
+daemon:x:1:1:daemon    :/usr/sbin:/usr/sbin/nologin
+   bin:x:2:2:bin       :/bin:/usr/sbin/nologin
+   sys:x:3:3:sys       :/dev:/usr/sbin/nologin
+</pre>
+</div>
+
+<br>
+
+<h4>Auto padding</h4>
+
+<p>
+With auto padding 'P', no need to figure out the maximum size record for each field, all of them are padded with the minimum size automatically:
+</p>
+<div class="zim-object">
+<pre>
+  root:x:0:0:  root:    /root:        /bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+   bin:x:2:2:   bin:     /bin:/usr/sbin/nologin
+   sys:x:3:3:   sys:     /dev:/usr/sbin/nologin
 </pre>
 </div>
 
