@@ -836,27 +836,43 @@ def advanced_commands():
 			return
 		
 		if c == ord('h'):
-			f = fields(1)
-			if len( f ) == 0:
-				return
-			histogram( f[0] )
+			histogram()
 			return
 		
 		if c == ord('q'):
 			return
 
-def histogram(f):
-	call_pipe("awk '%s{ print $%s }'" % (awk_begin(), f) )
-	r = TextBoxInput(["scale to ?"])
-	pre_list = cmd_list_to_pipe(CMD_LIST)
-	if r != "":
-		if isDigit(r):
-			limit = r
-			cmd = 'pawk_max=0; for i in $(%s); do if [[ "$i" -gt "$pawk_max" ]]; then pawk_max=$i; fi done; r=$(echo "scale=10;$pawk_max/%s"|bc); for i in $(%s); do echo "scale=0;$i/$r" | bc ; done | for l in $(xargs); do for i in $(seq 0 $l); do echo -n "*"; done ; echo ;done' % (pre_list, limit, pre_list)
-	else:
-		cmd = 'for l in $(xargs); do for i in $(seq 0 $l); do echo -n "*"; done ; echo ; done'
-	
-	call_pipe(cmd)
+def remove_tabs( t ):
+	return t.replace("\t", "").replace("\n", "")
+
+def histogram():
+	awk_script = """
+		%s
+	{
+		if (length($1)>max) {
+			max=length($1);
+		}
+		labels[l]=$1;
+		values[l]=$2;
+		l++;
+	}
+	END {
+		l = 0;
+		d = 0;
+		for (l=0; l<NR; l++) {
+			star="";
+			p="";
+			for (j=0; j < (max - length(labels[l])); j++) { 
+				p = p" ";
+			}
+			for (k=0; k < values[l]; k++) { 
+				star=star"*";
+			}
+			print p labels[l], FS, star
+		}
+	}
+	""" % awk_begin("l=0;")
+	call_pipe("awk '%s'" % remove_tabs(awk_script))
 	
 def sum_( f ):
 	call_pipe("awk '%s{ print $%s }' | sed 's/^$/0/g' | awk 'BEGIN{RS=\"%s\";ORS=\"%s\"}{if (RT==\"\") printf \"%%s\",$0; else print}' | sed \"s/+$/\\n/g\" | bc" % (awk_begin(), f, "\\n", "+") )

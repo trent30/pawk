@@ -528,7 +528,7 @@ It's like a "SELECT field, count(*) FROM file GROUP BY field;"
 </p>
 
 <p>
-For instance, if we apply « count command » 'c' with field 7 on /etc/password :
+For instance, if we apply « count command » 'c' with field 7 on /etc/password:
 </p>
 <div class="zim-object">
 <pre>
@@ -547,31 +547,15 @@ For instance, if we apply « count command » 'c' with field 7 on /etc/password 
 <br>
 
 <p>
-We can also display a histogram 'h' of field 2 :
+We can also display an histogram 'h'. Field one must contain the labels, and field two the values:
 </p>
 <div class="zim-object">
 <pre>
-*****
-**********************************
-**
-*
-******************
-</pre>
-</div>
-
-<br>
-
-<p>
-The histogram can be scaled to a boundary. In this case all the values are increased or decreased by the same ratio, thus the maximum value will touch the boundary. <br>
-Here the same histogram with a boundary at 80:
-</p>
-<div class="zim-object">
-<pre>
-************
-*********************************************************************************
-*****
-***
-*******************************************
+        /bin/bash : *****
+       /bin/false : **********************************
+          /bin/sh : **
+        /bin/sync : *
+/usr/sbin/nologin : ******************
 </pre>
 </div>
 
