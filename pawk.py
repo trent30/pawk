@@ -102,7 +102,7 @@ def quit_menu():
 		if c == ord('d'):
 			filename = TextBoxInput(["Enter filename"])
 			if filename != "":
-				popup( save(filename, DATA_LIST[ -1 ]) )
+				statusBar( save(filename, DATA_LIST[ -1 ]) ) 
 		
 		if c == ord('s'):
 			save_script()
@@ -116,7 +116,7 @@ def save_script():
 	else:
 		filename = TextBoxInput(["Enter filename"])
 		if filename != "":
-			popup( save(filename, cmd_list_to_pipe(CMD_LIST), True ) )
+			statusBar( save(filename, cmd_list_to_pipe(CMD_LIST), True ) )
 
 def save( filename, data, script=False):
 	if os.path.exists( filename ):
