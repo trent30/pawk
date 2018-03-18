@@ -123,7 +123,9 @@ def save( filename, data, script=False):
 		m = "File exist"
 		return m
 	fd = open( filename, "w" )
-	fd.write( "#!/bin/bash\n\n" + data )
+	if script:
+		fd.write( "#!/bin/bash\n\n" + data )
+	fd.write( data )
 	fd.close()
 	if script:
 		os.chmod(filename, stat.S_IRWXU|stat.S_IRWXG|stat.S_IROTH|stat.S_IXOTH)
