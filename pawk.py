@@ -784,7 +784,17 @@ def padding(l):
 	run("awk", "'%s{ p=\"\"; for (i = 1; i <= %s - length($%i); i++) { p = p\" \" }; print %s}'" % (awk_begin(), r, l, l2) )
 
 def auto_padding():
-	param = "'%s{for (i=1; i<=NF; i++) { if (length($i)>max[i]) {max[i]=length($i);}data[l]=$i;l++;}}END {d = 0;for (l=0; l<NR; l++) {for (c=1; c<=NF; c++) {p=\"\"; for (j=0; j < (max[c]-length(data[d])); j++) { p = p\" \";}printf \"%%s%%s\", p, data[d];if (c!=NF) {printf \"%%s\", FS;}d++;}print \"\";}}'" % awk_begin("l=0;")
+	r = ""
+	print_win( ["align ?", "l : left", "r : right"] )
+	while r != ord("l") and r != ord("r"):
+		r = stdscr.getch()
+		if r ==  ord("l"):
+			before = ""
+			after = ",p"
+		if r ==  ord("r"):
+			before = "p,"
+			after = ""
+	param = "'%s{for (i=1; i<=NF; i++) { if (length($i)>max[i]) {max[i]=length($i);}data[l]=$i;l++;}}END {d = 0;for (l=0; l<NR; l++) {for (c=1; c<=NF; c++) {p=\"\"; for (j=0; j < (max[c]-length(data[d])); j++) { p = p\" \";}printf \"%%s%%s\", %s data[d] %s;if (c!=NF) {printf \"%%s\", FS;}d++;}print \"\";}}'" % (awk_begin("l=0;"), before, after)
 	run("awk", param)
 	
 def advanced_commands():
