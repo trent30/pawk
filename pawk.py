@@ -725,7 +725,7 @@ def append_field():
 	r = TextBoxInput(msg)
 	if r == "":
 		return
-	call_pipe("awk '%s{print $0\"%s\"%s; n++}'" % (awk_begin("n=1;"), FS, r) )	
+	call_pipe("awk '%s{print $0,%s; n++}'" % (awk_begin("n=1;"), r) )	
 
 def insert_line_number():
 	call_pipe("awk '%s{print n\"%s\"$0; n++}'" % (awk_begin("n=1;"), FS) )
