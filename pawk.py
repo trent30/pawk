@@ -315,6 +315,7 @@ def print_script():
 	global CMD_LIST
 	global cat_lst
 	global OFFSET_Y
+	global SHOW_LINE_NUMBERS
 	
 	old = OFFSET_Y
 	OFFSET_Y = 1
@@ -352,7 +353,7 @@ def print_script():
 			break
 	
 	OFFSET_Y = old
-	fill_screen( DATA_LIST[ -1 ])
+	fill_screen( DATA_LIST[ -1 ], SHOW_LINE_NUMBERS)
 
 def undo():
 	global CMD_LIST
@@ -510,6 +511,7 @@ def fields(limit=0):
 		if actual_column < 1:
 			actual_column = len(meta)
 	
+	fill_screen(DATA_LIST[ -1 ], SHOW_LINE_NUMBERS)
 	OFFSET_Y = old
 	return lst
 
@@ -556,7 +558,7 @@ def cut():
 			if end < start:
 				end = start
 			
-	run_ex(["cut", "-c%i-%i" % (start + 1, end + 1) ])
+	call_pipe("cut -c%i-%i" % (start + 1, end + 1))
 
 def debug( m ):
 	fd = open("/tmp/debug", "a")
@@ -591,35 +593,6 @@ def count_fields( data):
 			r = l
 	return r
 
-def run(cmd, args):
-	global OFFSET_Y
-	OFFSET_Y = 1
-	try:
-		d = call_awk(cmd, args[1:-1], DATA_LIST[ -1 ])
-	except:
-		statusBar("Error : %s %s " % (cmd, args))
-		return 1
-	else:
-		CMD_LIST.append(cmd + " " + args)
-		DATA_LIST.append(d)
-		fill_screen(DATA_LIST[ -1 ], SHOW_LINE_NUMBERS)
-		return 0
-
-def run_ex(cmd):
-	global OFFSET_Y
-	OFFSET_Y = 1
-	try:
-		d = call_external_command(cmd, DATA_LIST[ -1 ])
-	except:
-		statusBar("Error : %s " % cmd)
-		return 1
-	else:
-		if d is not None:
-			CMD_LIST.append(list2str(cmd))
-			DATA_LIST.append(d)
-			fill_screen(DATA_LIST[ -1 ], SHOW_LINE_NUMBERS)
-		return 0
-
 def RS_text():
 	global RS
 	if escape_rs( RS ) != "\n":
@@ -650,7 +623,7 @@ def where():
 	r = TextBoxInput(msg)
 	if r == "":
 		return
-	run("awk", "'%s{if (%s) {print $0; }; n++}'" % (awk_begin("n=1;"), r))
+	call_pipe("awk '%s{if (%s) {print $0; }; n++}'" % (awk_begin("n=1;"), r))
 
 def escape_rs( t, reverse=False):
 	d = { 	"\\n" : "\n", \
@@ -752,10 +725,10 @@ def append_field():
 	r = TextBoxInput(msg)
 	if r == "":
 		return
-	run("awk", "'%s{print $0\"%s\"%s; n++}'" % (awk_begin("n=1;"), FS, r) )	
+	call_pipe("awk '%s{print $0\"%s\"%s; n++}'" % (awk_begin("n=1;"), FS, r) )	
 
 def insert_line_number():
-	run("awk", "'%s{print n\"%s\"$0; n++}'" % (awk_begin("n=1;"), FS) )
+	call_pipe("awk '%s{print n\"%s\"$0; n++}'" % (awk_begin("n=1;"), FS) )
 
 def transpose():
 	global CMD_LIST
@@ -781,7 +754,7 @@ def padding(l):
 			l2 = l2.replace('$%i' % l, 'p$%i' % l)
 	msg = ["length ?"]
 	r = TextBoxInput(["length ?"])
-	run("awk", "'%s{ p=\"\"; for (i = 1; i <= %s - length($%i); i++) { p = p\" \" }; print %s}'" % (awk_begin(), r, l, l2) )
+	call_pipe("awk '%s{ p=\"\"; for (i = 1; i <= %s - length($%i); i++) { p = p\" \" }; print %s}'" % (awk_begin(), r, l, l2) )
 
 def auto_padding():
 	r = ""
@@ -794,8 +767,7 @@ def auto_padding():
 		if r ==  ord("r"):
 			before = "p,"
 			after = ""
-	param = "'%s{for (i=1; i<=NF; i++) { if (length($i)>max[i]) {max[i]=length($i);}data[l]=$i;l++;}}END {d = 0;for (l=0; l<NR; l++) {for (c=1; c<=NF; c++) {p=\"\"; for (j=0; j < (max[c]-length(data[d])); j++) { p = p\" \";}printf \"%%s%%s\", %s data[d] %s;if (c!=NF) {printf \"%%s\", FS;}d++;}print \"\";}}'" % (awk_begin("l=0;"), before, after)
-	run("awk", param)
+	call_pipe("awk '%s{for (i=1; i<=NF; i++) { if (length($i)>max[i]) {max[i]=length($i);}data[l]=$i;l++;}}END {d = 0;for (l=0; l<NR; l++) {for (c=1; c<=NF; c++) {p=\"\"; for (j=0; j < (max[c]-length(data[d])); j++) { p = p\" \";}printf \"%%s%%s\", %s data[d] %s;if (c!=NF) {printf \"%%s\", FS;}d++;}print \"\";}}'" % (awk_begin("l=0;"), before, after))
 	
 def advanced_commands():
 	msg = """
@@ -872,7 +844,7 @@ def advanced_commands():
 			return
 
 def histogram(f):
-	run("awk", "'%s{ print $%s }'" % (awk_begin(), f) )
+	call_pipe("awk '%s{ print $%s }'" % (awk_begin(), f) )
 	r = TextBoxInput(["scale to ?"])
 	pre_list = cmd_list_to_pipe(CMD_LIST)
 	if r != "":
@@ -885,13 +857,8 @@ def histogram(f):
 	call_pipe(cmd)
 	
 def sum_( f ):
-	run("awk", "'%s{ print $%s }'" % (awk_begin(), f) )
-	run_ex(['sed', 's/^$/0/g'])
-	ps = '"%' + 's"'
-	run("awk", "'BEGIN{RS=\"%s\";ORS=\"%s\"}{if (RT==\"\") printf %s,$0; else print}'" % ("\\n", "+", ps))
-	run('sed', '"s/+$/\\n/g"')
-	run_ex(['bc'])
-
+	call_pipe("awk '%s{ print $%s }' | sed 's/^$/0/g' | awk 'BEGIN{RS=\"%s\";ORS=\"%s\"}{if (RT==\"\") printf \"%%s\",$0; else print}' | sed \"s/+$/\\n/g\" | bc" % (awk_begin(), f, "\\n", "+") )
+	
 def mean( f ):
 	global CMD_LIST
 	pre_list = cmd_list_to_pipe(CMD_LIST)
@@ -899,7 +866,8 @@ def mean( f ):
 	cmd = "tr '\\n' '/' |  xargs -I'{}' echo \"scale=10;\"{}$(%s) | bc " % ( pre_list + " | wc -l")
 	call_pipe(cmd)
 	
-def call_pipe(cmd):	
+def call_pipe(cmd):
+	global SHOW_LINE_NUMBERS
 	d = call_external_command(["bash", "-c", cmd], DATA_LIST[ -1 ])
 	CMD_LIST.append(cmd)
 	DATA_LIST.append(d)
@@ -971,11 +939,11 @@ def main_function(arg):
 			
 		if c == ord('u'):
 			undo()
-			fill_screen(DATA_LIST[ -1 ] )
+			fill_screen(DATA_LIST[ -1 ], SHOW_LINE_NUMBERS )
 			
 		if c == ord('r'):
 			redo()
-			fill_screen(DATA_LIST[ -1 ] )
+			fill_screen(DATA_LIST[ -1 ], SHOW_LINE_NUMBERS )
 			
 		if c == ord('e'):
 			print_script()
@@ -986,10 +954,10 @@ def main_function(arg):
 		if c == ord('i'):
 			r = TextBoxInput(["External command"])
 			if r != "":
-				run_ex(r.split())
+				call_pipe(r)
 			
 		if c == ord('g'):
-			run_ex(str("egrep %s" % TextBoxInput(["Enter regex to egrep"])).split())
+			call_pipe("egrep %s" % TextBoxInput(["Enter regex to egrep"]))
 		
 		if c == ord('F'):
 			new_field_separator()
@@ -1009,14 +977,12 @@ def main_function(arg):
 		if c == ord('f'):
 			lst = fields()			
 			if len(lst) > 0:
-				args = "'%s{ print %s }'" % (awk_begin(), lst2colums(lst))
-				run("awk", args)
-			fill_screen(DATA_LIST[ -1 ], SHOW_LINE_NUMBERS)
+				call_pipe("awk '%s{ print %s }'" % (awk_begin(), lst2colums(lst)) )
 			
 		if c == ord('l'):
 			r = TextBoxInput(["Enter the line number"])
 			if isDigit(r):
-				run("awk", "'%s{if (n==%s) {print $0; exit}; n++}'" % (awk_begin("n=1;"), r))
+				call_pipe("awk '%s{if (n==%s) {print $0; exit}; n++}'" % (awk_begin("n=1;"), r))
 			else:
 				statusBar("You have to enter a valid number")
 		
@@ -1027,14 +993,13 @@ def main_function(arg):
 		if c == ord('s'):
 			old = TextBoxInput(["Enter old pattern"])
 			new = TextBoxInput(["Enter new pattern"])
-			#~ run_ex(['sed', '-e', 's/%s/%s/g' % (old, new)])
-			run("awk", "'BEGIN{RS=\"%s\";ORS=\"%s\"}{if (RT==\"\") printf \"%%s\",$0; else print}'" % (old, new))
+			call_pipe("awk 'BEGIN{RS=\"%s\";ORS=\"%s\"}{if (RT==\"\") printf \"%%s\",$0; else print}'" % (old, new))
 			
 		if c == ord('t'):
-			run_ex(str("tail -n " + TextBoxInput(["tail -n <N>"])).split())
+			call_pipe("tail -n " + TextBoxInput(["tail -n <N>"]))
 			
 		if c == ord('h'):
-			run_ex(str("head -n " + TextBoxInput(["head -n <N>"])).split())
+			call_pipe("head -n " + TextBoxInput(["head -n <N>"]))
 			
 		if c == ord('o'):
 			sort()
