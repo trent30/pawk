@@ -121,7 +121,10 @@ def save_script():
 def save( filename, data, script=False):
 	if os.path.exists( filename ):
 		m = "File exist"
-		return m
+		print_win([m + ". Do you want to overwrite ? (y/n)"])
+		c = stdscr.getch()
+		if c != ord('y'):
+			return m
 	fd = open( filename, "w" )
 	if script:
 		fd.write( "#!/bin/bash\n\n" + data )
