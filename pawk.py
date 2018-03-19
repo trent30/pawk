@@ -28,7 +28,7 @@ def print_help():
 	msg = """
 	HELP
 	
-	Commands :
+	Commands:
 	
 	a : advanced commands
 	c : cut -c<Start>-<End>
@@ -40,7 +40,7 @@ def print_help():
 	T : table
 	i : insert a custom command
 	
-	awk :
+	awk:
 	
 	f : select several fields
 	l : grep one line by his number
@@ -48,7 +48,7 @@ def print_help():
 	F : change field separator
 	L : change line separator
 	
-	Shortcuts :
+	Misc:
 	
 	e : edit script
 	n : show/hide line numbers 
@@ -337,7 +337,7 @@ def print_script():
 		if len(CMD_LIST) == 0:
 			statusBar("There is no command.")
 			return
-		msg = "\nCommand list :\n\n"
+		msg = "\nCommand list:\n\n"
 		n = 1
 		for i in CMD_LIST:
 			msg += str(n) + " : " + i + "\n"
@@ -345,7 +345,7 @@ def print_script():
 		
 		concat = cmd_list_to_pipe(CMD_LIST)
 		if concat != "":
-			msg += "\n\n\nOneLiner :\n\n"
+			msg += "\n\n\nOneLiner:\n\n"
 		msg += concat
 		
 		fill_screen( msg, line_numbers=False, full_line=True, no_RS=True)

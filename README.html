@@ -47,7 +47,7 @@
 <br>
 
 <p>
-Pawk is a WYSIWYG tool to generate bash script very quickly and without pain.<br>
+Pawk is a WYSIWYG tool to generate bash scripts very quickly and without pain.<br>
 Usually, one can do all that they want with a few commands and pipes, but often waste a lot of time figuring out how to arrange commands, and what the appropriate parameters are for each of them. Especially when not familiar with awk.
 </p>
 
@@ -75,7 +75,7 @@ python pawk.py [FILE...]
 <br>
 
 <pre>
- Commands :
+ Commands:
 	a : advanced commands
 	c : cut -c&lt;Start&gt;-&lt;End&gt;
 	g : egrep
@@ -90,7 +90,7 @@ python pawk.py [FILE...]
 <br>
 
 <pre>
- awk :
+ awk:
 	f : select several fields
 	l : grep one line by its number
 	w : where (select a field with a condition)
@@ -101,7 +101,7 @@ python pawk.py [FILE...]
 <br>
 
 <pre>
- Misc :
+ Misc:
 	e : edit script
 	n : show/hide line numbers 
 	r : redo
@@ -137,7 +137,7 @@ sys:x:3:3:sys:/dev:/usr/sbin/nologin
 <br>
 
 <p>
-Press 'f' (like field) :
+Press 'f' (like field):
 </p>
 <div class="zim-object">
 <pre>
@@ -174,7 +174,7 @@ Column : 1 | Actuals fields are : [] | a : append | r : remove last one | m : ma
 <br>
 
 <p>
-Now we obtain correct headers numbers, and we can append all the fields we want with the left or right arrows. <br>
+Now we obtain correct headers numbers, and we can append all the fields we want with the left and right arrows.<br>
 We can append manually (just press 'm') a huge number of fields even more quickly with range '-' and the wildcard character '*':
 </p>
 <div class="zim-object">
@@ -206,7 +206,7 @@ Column : 1 | Actuals fields are : [1, 3, 4, 5, 6, 7] | a : append | r : remove l
 <br>
 
 <p>
-Ok, we have all the fields we want, now we can quit with 'q' to watch the result :
+Ok, we have all the fields we want, now we can quit with 'q' to watch the result:
 </p>
 <div class="zim-object">
 <pre>
@@ -229,13 +229,13 @@ The script to obtain the last result can be viewed with 'e' (like edit):
 </p>
 <div class="zim-object">
 <pre>
-Command list :  
+Command list:  
 
 1 : cat /etc/passwd
 2 : awk 'BEGIN{FS=":";}{ print $1":"$3":"$4":"$5":"$6":"$7 }'
 3 : head -n 1
 
-OneLiner :
+OneLiner:
 
 awk 'BEGIN{FS=":";}{ print $1":"$3":"$4":"$5":"$6":"$7 }' /etc/passwd | head -n 1
 
@@ -248,7 +248,7 @@ q : quit | u : undo | r : redo | s : save script
 <br>
 
 <p>
-Each command can be undone or redone to quickly retry if you miss something. The data is cached so it should be instantaneous. <br>
+Each command can be undone or redone to quickly retry if you miss something. The data is cached so it should be instantaneous.<br>
 When you save the script, the shebang is automatically added and the file is automatically executable (because we always forget to 'chmod +x').
 </p>
 
@@ -282,7 +282,7 @@ So we shouldn't lose work.
 <br>
 
 <p>
-With table command 'T' we can choose a header separator and the right align fields, the other one will be left align
+With table command 'T' we can choose a header separator and the right-aligned fields, the other one will be left-aligned.
 </p>
 <div class="zim-object">
 <pre>
@@ -301,8 +301,8 @@ news  |x|9|    9|news  |/var/spool/news|/usr/sbin/nologin
 </div>
 
 <p>
-Here, only the field 4 is right align and the header is on the first line (even if it doesn't make any sense in the context).<br>
-Note: considering the field separator are replaced by "|", you should use this command only at the end, just for the final rendering.
+Here, only the 4th field is right-aligned and the header is on the first line (even if it doesn't make any sense in the context).<br>
+Note: considering field separators are replaced by "|", you should use this command only at the end, just for the final rendering.
 </p>
 
 <h3>Sort</h3>
@@ -310,7 +310,7 @@ Note: considering the field separator are replaced by "|", you should use this c
 <br>
 
 <p>
-With 'o' we can sort by fields. After the fields selection, we can also add parameters to the sort command. A brief reminder is displayed, because we are always mistaken between '-r' and '-R'.
+With 'o' we can sort by fields. After the field selection, we can also add parameters to the sort command. A brief reminder is displayed, because we are always mistaken between '-r' and '-R'.
 </p>
 <div class="zim-object">
 <pre>
@@ -355,7 +355,7 @@ python pawk.py /tmp/birth
 <br>
 
 <p>
-If we want only the line with name, we can use the « where » command ('w') :
+If we want only the line with name, we can use the « where » command ('w'):
 </p>
 <div class="zim-object">
 <pre>
@@ -396,7 +396,7 @@ Now we only have every third line.
 <br>
 
 <p>
-The 's' command uses awk to substitute, to use regex we can call another command with 'i' (insert a custom command) on:
+The 's' command uses awk to substitute, to use a regex we can call another command with 'i' (insert a custom command) on:
 </p>
 <div class="zim-object">
 <pre>
@@ -485,7 +485,7 @@ h : histogram
 <br>
 
 <p>
-Like a spreadsheet, we can do operations on the new field: $1+$2
+Like a spreadsheet, we can do arithmetic operations on the new field: $1+$2
 </p>
 <div class="zim-object">
 <pre>
@@ -498,7 +498,7 @@ Like a spreadsheet, we can do operations on the new field: $1+$2
 <br>
 
 <p>
-Or concatenate texte: " | "$1" apples and "$2" bananas"
+Or concatenate text: " | "$1" apples and "$2" bananas"
 </p>
 <div class="zim-object">
 <pre>
@@ -525,7 +525,7 @@ Or concatenate texte: " | "$1" apples and "$2" bananas"
 <h4>Padding</h4>
 
 <p>
-We can align on left or right with specific width. Here, $1 on right and width=6, and $5 on left and width=10:
+We can align on the left or on the right with a specific width. Here, $1 on the right with width=6, and $5 on the left with width=10:
 </p>
 <div class="zim-object">
 <pre>
