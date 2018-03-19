@@ -18,7 +18,9 @@ END {
 				for (jh=0; jh < max[ch] ; jh++) { 
 					sep=sep"-";
 				}
-				sep=sep"+";
+				if (ch < NF) {
+					sep=sep"+";
+				}
 			}
 			print sep"\n";
 		}
