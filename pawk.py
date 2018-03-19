@@ -21,6 +21,8 @@ RS = "\n"
 SHOW_LINE_NUMBERS = False
 OFFSET_X = 1
 OFFSET_Y = 1
+
+SCRIPT_PATH = os.path.join( os.path.dirname(sys.argv[0]), "scripts", "")
 	
 def print_help():
 	msg = """
@@ -35,6 +37,7 @@ def print_help():
 	o : sort
 	s : substitute
 	t : tail -n <N>
+	T : table
 	i : insert a custom command
 	
 	awk :
@@ -929,6 +932,28 @@ sort options :
 		call_pipe(cmd)
 	fill_screen(DATA_LIST[ -1 ], SHOW_LINE_NUMBERS)
 
+def get_script( name ):
+	return remove_tabs( open( SCRIPT_PATH + name ).read() )
+
+def table( f ):
+	columns_align_right = ""
+	for i in f:
+		columns_align_right += "r[%i]=1;" % i
+	msg = """
+	Header ?
+	
+	0 : no header
+	N : the Nth line will be a separator
+	""".split("\n")
+	r = TextBoxInput(msg)
+	if r.isdigit():
+		if r == "0":
+			r = -1
+		columns_align_right += "header=%s;" % r
+	else:
+		columns_align_right += "header=%i;" % -1
+	call_pipe( "awk '%s'" % ( get_script( "table.awk") % awk_begin("l=0;OFS = \"|\";ORS = \"\";" + columns_align_right ) ) )
+	
 def main_function(arg):
 	global FS
 	global RS
@@ -1018,6 +1043,10 @@ def main_function(arg):
 			
 		if c == ord('t'):
 			call_pipe("tail -n " + TextBoxInput(["tail -n <N>"]))
+			
+		if c == ord('T'):
+			print_win(["Select all fields to align right"])
+			table( fields() )
 			
 		if c == ord('h'):
 			call_pipe("head -n " + TextBoxInput(["head -n <N>"]))
