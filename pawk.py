@@ -450,7 +450,7 @@ def width_field(n , dico):
 			return begin + n - 1, begin + dico[i] + n - 1
 		begin += dico[i]
 
-def fields(limit=0):
+def fields(limit=0, msg=[]):
 	global SHOW_LINE_NUMBERS
 	global FS
 	global OFFSET_Y
@@ -463,6 +463,7 @@ def fields(limit=0):
 	old = OFFSET_Y
 	OFFSET_Y = 1
 	shift_x = 0
+	cpt = 0
 	
 	while c != ord('q'):
 		
@@ -479,6 +480,9 @@ def fields(limit=0):
 		fill_screen(data, shift_x=shift_x)
 		paint_field(stdscr, d - shift_x, d, f, data )
 		statusBar("Column : %i | Actuals fields are : %s | a : append | r : remove last one | m : manually | F : field separator | q : quit" % (actual_column, str(lst)) )
+		
+		if cpt == 0 and len(msg) > 0:
+			print_win(msg)
 		
 		c = stdscr.getch()
 		
@@ -518,7 +522,9 @@ def fields(limit=0):
 			
 		if actual_column < 1:
 			actual_column = len(meta)
-	
+		
+		cpt += 1
+		
 	fill_screen(DATA_LIST[ -1 ], SHOW_LINE_NUMBERS)
 	OFFSET_Y = old
 	return lst
@@ -1043,8 +1049,7 @@ def main_function(arg):
 			call_pipe("tail -n " + TextBoxInput(["tail -n <N>"]))
 			
 		if c == ord('T'):
-			print_win(["Select all fields to align right"])
-			table( fields() )
+			table( fields( msg=["Select all fields to align right"] ) )
 			
 		if c == ord('h'):
 			call_pipe("head -n " + TextBoxInput(["head -n <N>"]))
