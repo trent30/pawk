@@ -949,6 +949,7 @@ def table( f ):
 		columns_align_right += "header=%s;" % r
 	else:
 		columns_align_right += "header=%i;" % -1
+	columns_align_right += "footer=-1;"
 	call_pipe( "awk '%s'" % ( get_script( "table.awk") % awk_begin("l=0;OFS = \"|\";ORS = \"\";" + columns_align_right ) ) )
 	
 def main_function(arg):

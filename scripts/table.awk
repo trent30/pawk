@@ -1,5 +1,4 @@
 %s
-
 {
 	for (i=1; i<=NF; i++) { 
 		if (length($i)>max[i]) {
