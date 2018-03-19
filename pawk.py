@@ -769,13 +769,10 @@ def auto_padding():
 	print_win( ["align ?", "l : left", "r : right"] )
 	while r != ord("l") and r != ord("r"):
 		r = stdscr.getch()
-		if r ==  ord("l"):
-			before = ""
-			after = ",p"
+		padding = ""
 		if r ==  ord("r"):
-			before = "p,"
-			after = ""
-	call_pipe("awk '%s{for (i=1; i<=NF; i++) { if (length($i)>max[i]) {max[i]=length($i);}data[l]=$i;l++;}}END {d = 0;for (l=0; l<NR; l++) {for (c=1; c<=NF; c++) {p=\"\"; for (j=0; j < (max[c]-length(data[d])); j++) { p = p\" \";}printf \"%%s%%s\", %s data[d] %s;if (c!=NF) {printf \"%%s\", FS;}d++;}print \"\";}}'" % (awk_begin("l=0;"), before, after))
+			padding = "right=1;"
+	call_pipe("awk '%s'" % ( get_script("padding.awk") % awk_begin("l=0;ORS = \"\";" + padding) ) )
 	
 def advanced_commands():
 	msg = """
