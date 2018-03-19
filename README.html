@@ -83,6 +83,7 @@ python pawk.py [FILE...]
 	o : sort
 	s : substitute
 	t : tail -n &lt;N&gt;
+	T : table
 	i : insert a custom command
 </pre>
 
@@ -274,6 +275,36 @@ When you quit the program, a popup asks what we want to do.
 So we shouldn't lose work.
 </p>
 
+<br>
+
+<h3>Table</h3>
+
+<br>
+
+<p>
+With table command 'T' we can choose a header separator and the right align fields, the other one will be left align
+</p>
+<div class="zim-object">
+<pre>
+root  |x|0|    0|root  |/root          |/bin/bash         
+------+-+-+-----+------+---------------+-----------------
+daemon|x|1|    1|daemon|/usr/sbin      |/usr/sbin/nologin
+bin   |x|2|    2|bin   |/bin           |/usr/sbin/nologin
+sys   |x|3|    3|sys   |/dev           |/usr/sbin/nologin
+sync  |x|4|65534|sync  |/bin           |/bin/sync        
+games |x|5|   60|games |/usr/games     |/usr/sbin/nologin
+man   |x|6|   12|man   |/var/cache/man |/usr/sbin/nologin
+lp    |x|7|    7|lp    |/var/spool/lpd |/usr/sbin/nologin
+mail  |x|8|    8|mail  |/var/mail      |/usr/sbin/nologin
+news  |x|9|    9|news  |/var/spool/news|/usr/sbin/nologin
+</pre>
+</div>
+
+<p>
+Here, only the field 4 is right align and the header is on the first line (even if it doesn't make any sense in the context).<br>
+Note: considering the field separator are replaced by "|", you should use this command only at the end, just for the final rendering.
+</p>
+
 <h3>Sort</h3>
 
 <br>
@@ -299,6 +330,7 @@ With 'o' we can sort by fields. After the fields selection, we can also add para
 </pre>
 </div>
 
+<br>
 <br>
 
 <h3>Select fields with condition</h3>
@@ -411,6 +443,7 @@ _libc6_;_libcairo2_;_libgcc1_;
 </pre>
 </div>
 
+<br>
 <br>
 
 <h3>Advanced commands</h3>
