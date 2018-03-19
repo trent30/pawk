@@ -128,9 +128,13 @@ def save( filename, data, script=False):
 		c = stdscr.getch()
 		if c != ord('y'):
 			return m
-	fd = open( filename, "w" )
+	try:
+		fd = open( filename, "w" )
+	except:
+		popup("can't open file %s" % filename)
+		return "nothing saved"
 	if script:
-		fd.write( "#!/bin/bash\n\n" + data )
+		fd.write( "#!/bin/bash\n\n" )
 	fd.write( data )
 	fd.close()
 	if script:
