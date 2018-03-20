@@ -9,6 +9,7 @@ import subprocess
 import copy
 import stat
 from time import sleep
+import ConfigParser
 
 MAX_Y, MAX_X = 0, 0
 CMD_LIST = []
@@ -22,42 +23,74 @@ SHOW_LINE_NUMBERS = False
 OFFSET_X = 1
 OFFSET_Y = 1
 
-SCRIPT_PATH = os.path.join( os.path.dirname(sys.argv[0]), "scripts", "")
-	
+SCRIPT_PATH = os.path.join( os.path.dirname(sys.argv[0]), "scripts", "" )
+CONFIG = ConfigParser.RawConfigParser()
+
+def read_conf():
+	global CONFIG
+	path = os.path.join( os.path.expanduser('~'), ".config", "pawk", "" ) + "conf.rc"
+	if os.path.isfile( path ):
+		CONFIG.read(path)
+	else:
+		path = os.path.join( os.path.dirname(sys.argv[0]), "conf.rc" )
+		CONFIG.read( path )
+
 def print_help():
+	global CONFIG
 	msg = """
 	HELP
 	
 	Commands:
 	
-	a : advanced commands
-	c : cut -c<Start>-<End>
-	g : egrep
-	h : head -n <N>
-	o : sort
-	s : substitute
-	t : tail -n <N>
-	T : table
-	i : insert a custom command
+	%s : advanced commands
+	%s : cut -c<Start>-<End>
+	%s : egrep
+	%s : head -n <N>
+	%s : sort
+	%s : substitute
+	%s : tail -n <N>
+	%s : table
+	%s : insert a custom command
 	
 	awk:
 	
-	f : select several fields
-	l : grep one line by his number
-	w : where (select a field with condition)
-	F : change field separator
-	L : change line separator
+	%s : select several fields
+	%s : grep one line by his number
+	%s : where (select a field with condition)
+	%s : change field separator
+	%s : change line separator
 	
 	Misc:
 	
-	e : edit script
-	n : show/hide line numbers 
-	r : redo
-	u : undo
-	/ : search
-	? : print this help message
-	q : quit
-	"""
+	%s : edit script
+	%s : show/hide line numbers 
+	%s : redo
+	%s : undo
+	%s : search
+	%s : print this help message
+	%s : quit
+	""" % ( CONFIG.get('main_shortcuts', 'advanced_commands'), \
+		CONFIG.get('main_shortcuts', 'cut'), \
+		CONFIG.get('main_shortcuts', 'grep'), \
+		CONFIG.get('main_shortcuts', 'head'), \
+		CONFIG.get('main_shortcuts', 'sort'), \
+		CONFIG.get('main_shortcuts', 'substitute'), \
+		CONFIG.get('main_shortcuts', 'tail'), \
+		CONFIG.get('main_shortcuts', 'table'), \
+		CONFIG.get('main_shortcuts', 'custom_command'), \
+		CONFIG.get('awk_shortcuts', 'select_fields'), \
+		CONFIG.get('awk_shortcuts', 'grep_one_line'), \
+		CONFIG.get('awk_shortcuts', 'where'), \
+		CONFIG.get('awk_shortcuts', 'field_separator'), \
+		CONFIG.get('awk_shortcuts', 'line_separator'), \
+		CONFIG.get('misc_shortcuts', 'edit'), \
+		CONFIG.get('misc_shortcuts', 'line_numbers'), \
+		CONFIG.get('misc_shortcuts', 'redo'), \
+		CONFIG.get('misc_shortcuts', 'undo'), \
+		CONFIG.get('misc_shortcuts', 'search'), \
+		CONFIG.get('misc_shortcuts', 'help'), \
+		CONFIG.get('misc_shortcuts', 'quit')
+		)
 	fill_screen( msg )
 	statusBar("press 'q' to quit")
 	wait_for_key('q')
@@ -72,42 +105,48 @@ def quit_curses():
 
 def quit_menu():
 	global DATA_LIST
+	global CONFIG
 	msg = """
              Quit ?
 	
-	a : abort
-	d : save data in file
-	s : save script in file
-	p : print data to standard output
-	q : quit
-	"""
+	%s : abort
+	%s : save data in file
+	%s : save script in file
+	%s : print data to standard output
+	%s : quit
+	""" % (\
+	CONFIG.get('quit_shortcuts', 'abort'), \
+	CONFIG.get('quit_shortcuts', 'data'), \
+	CONFIG.get('quit_shortcuts', 'script'), \
+	CONFIG.get('quit_shortcuts', 'print'), \
+	CONFIG.get('quit_shortcuts', 'quit') )
 	
 	print_win( msg.split("\n") )
 	c = ord(" ")
 	
-	while c != ord('q'):
+	while c != ord(CONFIG.get('quit_shortcuts', 'quit')):
 		
 		c = stdscr.getch()
 		
-		if c == ord('a'):
+		if c == ord(CONFIG.get('quit_shortcuts', 'abort')):
 			fill_screen( DATA_LIST[ -1 ])
 			return
 		
-		if c == ord('p'):
+		if c == ord(CONFIG.get('quit_shortcuts', 'print')):
 			quit_curses()
 			print( DATA_LIST[ -1 ])
 			exit(0)
 		
-		if c == ord('q'):
+		if c == ord(CONFIG.get('quit_shortcuts', 'quit')):
 			quit_curses()
 			exit(0)
 		
-		if c == ord('d'):
+		if c == ord(CONFIG.get('quit_shortcuts', 'data')):
 			filename = TextBoxInput(["Enter filename"])
 			if filename != "":
 				statusBar( save(filename, DATA_LIST[ -1 ]) ) 
 		
-		if c == ord('s'):
+		if c == ord(CONFIG.get('quit_shortcuts', 'script')):
 			save_script()
 		
 		print_win( msg.split("\n") )
@@ -328,12 +367,13 @@ def print_script():
 	global cat_lst
 	global OFFSET_Y
 	global SHOW_LINE_NUMBERS
+	global CONFIG
 	
 	old = OFFSET_Y
 	OFFSET_Y = 1
 	c = ""
 	
-	while c != ord('q'):
+	while c != ord(CONFIG.get('quit_shortcuts', 'quit')):
 		if len(CMD_LIST) == 0:
 			statusBar("There is no command.")
 			return
@@ -349,19 +389,21 @@ def print_script():
 		msg += concat
 		
 		fill_screen( msg, line_numbers=False, full_line=True, no_RS=True)
-		statusBar("q : quit | u : undo | r : redo | s : save script")
+		statusBar("q : quit | %s : undo | %s : redo | s : save script" % (\
+			CONFIG.get('misc_shortcuts', 'undo'), \
+			CONFIG.get('misc_shortcuts', 'redo') ) )
 		
 		c = stdscr.getch()
-		if c == ord('u'):
+		if c == ord(CONFIG.get('misc_shortcuts', 'undo')):
 			undo()
 			
-		if c == ord('r'):
+		if c == ord(CONFIG.get('misc_shortcuts', 'redo')):
 			redo()
 			
 		if c == ord('s'):
 			save_script()
 			
-		if c == ord('e'):
+		if c == ord(CONFIG.get('misc_shortcuts', 'edit')):
 			break
 	
 	OFFSET_Y = old
@@ -459,6 +501,7 @@ def fields(limit=0, msg=[]):
 	global FS
 	global OFFSET_Y
 	global MAX_X
+	global CONFIG
 	lst = []
 	c = ord('a')
 	columns = ""
@@ -469,7 +512,7 @@ def fields(limit=0, msg=[]):
 	shift_x = 0
 	cpt = 0
 	
-	while c != ord('q'):
+	while c != ord(CONFIG.get('misc_shortcuts', 'quit')):
 		
 		if limit != 0:
 			if len(lst) == limit:
@@ -483,7 +526,10 @@ def fields(limit=0, msg=[]):
 			
 		fill_screen(data, shift_x=shift_x)
 		paint_field(stdscr, d - shift_x, d, f, data )
-		statusBar("Column : %i | Actuals fields are : %s | a : append | r : remove last one | m : manually | F : field separator | q : quit" % (actual_column, str(lst)) )
+		statusBar("Column : %i | Actuals fields are : %s | a : append | r : remove last one | m : manually | %s : field separator | %s : quit" % ( \
+			actual_column, str(lst), \
+			CONFIG.get('misc_shortcuts', 'quit'), \
+			CONFIG.get('awk_shortcuts', 'field_separator')) )
 		
 		if cpt == 0 and len(msg) > 0:
 			print_win(msg)
@@ -540,13 +586,14 @@ def cut():
 	global OFFSET_Y
 	global MAX_Y
 	global MAX_X
+	global CONFIG
 	
 	start = 0
 	end = 2
 	shift_x = 0
 	
 	c = ord('a')
-	while c != ord('q'):
+	while c != ord(CONFIG.get('misc_shortcuts', 'quit')):
 		
 		while start > shift_x:
 			shift_x += MAX_X
@@ -555,7 +602,7 @@ def cut():
 			
 		fill_screen(DATA_LIST[ -1 ], shift_x=shift_x)
 		paint_field(stdscr, start - shift_x, start, end + 1, DATA_LIST[ -1 ], OFFSET_Y - 1)
-		statusBar("start : %i | end : %i | q : quit" % ( start, end ) )
+		statusBar("start : %i | end : %i | %s : quit" % ( start, end, CONFIG.get('misc_shortcuts', 'quit') ) )
 		
 		c = stdscr.getch()
 		
@@ -676,6 +723,7 @@ def search( m ):
 	global OFFSET_Y
 	global OFFSET_X
 	global SHOW_LINE_NUMBERS
+	global CONFIG
 	
 	history = []
 	cpt = 0
@@ -700,17 +748,17 @@ def search( m ):
 		OFFSET_Y = history[pos][0] + 1
 		msg = ""
 		
-		if c == ord('q'):
+		if c == ord(CONFIG.get('misc_shortcuts', 'quit')):
 			fill_screen(DATA_LIST[ -1 ], SHOW_LINE_NUMBERS)
 			return
 			
-		if c == ord('n'):
+		if c == ord(CONFIG.get('misc_shortcuts', 'search_next')):
 			pos += 1
 			if pos >= len(history):
 				pos = 0
 				msg = " | search hit BOTTOM, continuing at TOP"
 			
-		if c == ord('p'):
+		if c == ord(CONFIG.get('misc_shortcuts', 'search_previous')):
 			pos -= 1
 			if pos < 0 :
 				pos = len(history) - 1
@@ -720,7 +768,10 @@ def search( m ):
 		fill_screen(DATA_LIST[ -1 ])
 		paint(stdscr, 0, history[pos][1], m)
 		msg = "line : %i" % OFFSET_Y + msg
-		statusBar(msg, "n : next | p : previous | q : quit")
+		statusBar(msg, "%s : next | %s : previous | %s : quit" % ( \
+			CONFIG.get('misc_shortcuts', 'search_next'), \
+			CONFIG.get('misc_shortcuts', 'search_previous'), \
+			CONFIG.get('misc_shortcuts', 'quit') ) )
 
 def new_line_separator():
 	global RS
@@ -785,74 +836,85 @@ def auto_padding():
 	call_pipe("awk '%s'" % ( get_script("padding.awk") % awk_begin("l=0;ORS = \"\";" + padding) ) )
 	
 def advanced_commands():
+	global CONFIG
 	msg = """
 	ADVANCED COMMANDS
 	
-	a : append a field
-	c : count occurrences on selected field
-	h : histogram
-	i : insert the line number on the first field
-	m : compute the mean
-	p : padding
-	P : auto padding all fields
-	s : sum values on selected field
-	t : transpose
+	%s : append a field
+	%s : count occurrences on selected field
+	%s : histogram
+	%s : insert the line number on the first field
+	%s : compute the mean
+	%s : padding
+	%s : auto padding all fields
+	%s : sum values on selected field
+	%s : transpose
 	
-	"""
+	""" % ( \
+	CONFIG.get('ac', 'append_field'), \
+	CONFIG.get('ac', 'count'), \
+	CONFIG.get('ac', 'histogram'), \
+	CONFIG.get('ac', 'insert'), \
+	CONFIG.get('ac', 'mean'), \
+	CONFIG.get('ac', 'padding'), \
+	CONFIG.get('ac', 'auto_padding'), \
+	CONFIG.get('ac', 'sum'), \
+	CONFIG.get('ac', 'transpose') )
 	fill_screen( msg )
-	statusBar("press 'q' to quit")
+	statusBar("press '%s' to quit" % CONFIG.get('misc_shortcuts', 'quit'))
+	
 	while 1:
 		c = stdscr.getch()
 		
-		if c == ord('c'):
+		if c == ord(CONFIG.get('ac', 'count')):
 			f = fields(1)
 			if len( f ) == 0:
 				return
 			count( f[0] )
 			return
 		
-		if c == ord('a'):
+		if c == ord(CONFIG.get('ac', 'append_field')):
 			append_field()
 			return
 		
-		if c == ord('i'):
+		if c == ord(CONFIG.get('ac', 'insert')):
 			insert_line_number()
 			return
 		
-		if c == ord('t'):
+		if c == ord(CONFIG.get('ac', 'transpose')):
 			transpose()
 			return
 		
-		if c == ord('s'):
+		if c == ord(CONFIG.get('ac', 'sum')):
 			f = fields(1)
 			if len( f ) == 0:
 				return
 			sum_( f[0] )
 			return
 		
-		if c == ord('m'):
+		if c == ord(CONFIG.get('ac', 'mean')):
 			f = fields(1)
 			if len( f ) == 0:
 				return
 			mean( f[0] )
 			return
 		
-		if c == ord('p'):
+		if c == ord(CONFIG.get('ac', 'padding')):
 			f = fields(1)
 			if len( f ) == 0:
 				return
 			padding( f[0] )
 			return
 		
-		if c == ord('P'):
+		if c == ord(CONFIG.get('ac', 'auto_padding')):
 			auto_padding()
 			return
 		
-		if c == ord('h'):
+		if c == ord(CONFIG.get('ac', 'histogram')):
 			histogram()
 			return
 		
-		if c == ord('q'):
+		if c == ord(CONFIG.get('misc_shortcuts', 'quit')):
 			return
 
 def remove_tabs( t ):
@@ -948,66 +1010,68 @@ def main_function(arg):
 	global SHOW_LINE_NUMBERS
 	global OFFSET_Y
 	global OFFSET_X
+	global CONFIG
 	
+	read_conf()
 	update_maxyx()
 	fill_screen(DATA_LIST[0])
 	
 	while 1:
 		c = stdscr.getch()
 		
-		if c == ord('a'):
+		if c == ord(CONFIG.get('main_shortcuts', 'advanced_commands')):
 			advanced_commands()
 			fill_screen(DATA_LIST[ -1 ], SHOW_LINE_NUMBERS)
 		
-		if c == ord('c'):
+		if c == ord(CONFIG.get('main_shortcuts', 'cut')):
 			cut()
 		
-		if c == ord('q'):
+		if c == ord(CONFIG.get('misc_shortcuts', 'quit')):
 			quit_menu()
 			
-		if c == ord('u'):
+		if c == ord(CONFIG.get('misc_shortcuts', 'undo')):
 			undo()
 			fill_screen(DATA_LIST[ -1 ], SHOW_LINE_NUMBERS )
 			
-		if c == ord('r'):
+		if c == ord(CONFIG.get('misc_shortcuts', 'redo')):
 			redo()
 			fill_screen(DATA_LIST[ -1 ], SHOW_LINE_NUMBERS )
 			
-		if c == ord('e'):
+		if c == ord(CONFIG.get('misc_shortcuts', 'edit')):
 			print_script()
 			
-		if c == ord('?'):
+		if c == ord(CONFIG.get('misc_shortcuts', 'help')):
 			print_help()
 			
-		if c == ord('i'):
+		if c == ord(CONFIG.get('main_shortcuts', 'custom_command')):
 			r = TextBoxInput(["External command"])
 			if r != "":
 				call_pipe(r)
 			
-		if c == ord('g'):
+		if c == ord(CONFIG.get('main_shortcuts', 'grep')):
 			call_pipe("egrep %s" % TextBoxInput(["Enter regex to egrep"]))
 		
-		if c == ord('F'):
+		if c == ord(CONFIG.get('awk_shortcuts', 'field_separator')):
 			new_field_separator()
 			fill_screen(DATA_LIST[ -1 ])
 			
-		if c == ord('L'):
+		if c == ord(CONFIG.get('awk_shortcuts', 'line_separator')):
 			new_line_separator()
 			fill_screen(DATA_LIST[ -1 ])
 			
-		if c == ord('n'):
+		if c == ord(CONFIG.get('misc_shortcuts', 'line_numbers')):
 			if SHOW_LINE_NUMBERS:
 				SHOW_LINE_NUMBERS = False
 			else:
 				SHOW_LINE_NUMBERS = True
 			fill_screen(DATA_LIST[ -1 ], SHOW_LINE_NUMBERS)
 			
-		if c == ord('f'):
+		if c == ord( CONFIG.get('awk_shortcuts', 'select_fields') ):
 			lst = fields()			
 			if len(lst) > 0:
 				call_pipe("awk '%s{ print %s }'" % (awk_begin(), lst2colums(lst)) )
 			
-		if c == ord('l'):
+		if c == ord(CONFIG.get('awk_shortcuts', 'grep_one_line')):
 			r = TextBoxInput(["Enter the line number"])
 			if isDigit(r):
 				call_pipe("awk '%s{if (n==%s) {print $0; exit}; n++}'" % (awk_begin("n=1;"), r))
@@ -1018,24 +1082,24 @@ def main_function(arg):
 			update_maxyx()
 			redraw()
 		
-		if c == ord('s'):
+		if c == ord(CONFIG.get('main_shortcuts', 'substitute')):
 			old = TextBoxInput(["Enter old pattern"])
 			new = TextBoxInput(["Enter new pattern"])
 			call_pipe("awk 'BEGIN{RS=\"%s\";ORS=\"%s\"}{if (RT==\"\") printf \"%%s\",$0; else print}'" % (old, new))
 			
-		if c == ord('t'):
+		if c == ord(CONFIG.get('main_shortcuts', 'tail')):
 			call_pipe("tail -n " + TextBoxInput(["tail -n <N>"]))
 			
-		if c == ord('T'):
+		if c == ord(CONFIG.get('main_shortcuts', 'table')):
 			table( fields( msg=["Select all fields to align right"] ) )
 			
-		if c == ord('h'):
+		if c == ord(CONFIG.get('main_shortcuts', 'head')):
 			call_pipe("head -n " + TextBoxInput(["head -n <N>"]))
 			
-		if c == ord('o'):
+		if c == ord(CONFIG.get('main_shortcuts', 'sort')):
 			sort()
 			
-		if c == ord('w'):
+		if c == ord(CONFIG.get('awk_shortcuts', 'where')):
 			where()
 		
 		if c == curses.KEY_NPAGE:
@@ -1052,7 +1116,7 @@ def main_function(arg):
 				OFFSET_Y = n
 			fill_screen(DATA_LIST[ -1 ], SHOW_LINE_NUMBERS)
 			
-		if c == ord('/'):
+		if c == ord(CONFIG.get('misc_shortcuts', 'search')):
 			search(TextBoxInput(["Enter pattern to search"]))
 		
 		sleep(0.01)

@@ -1,0 +1,55 @@
+[main_shortcuts]
+
+advanced_commands = a
+cut = c
+grep = g
+head = h
+sort = o
+substitute = s
+tail = t
+table = T
+custom_command = i
+
+
+[awk_shortcuts]
+
+select_fields = f
+grep_one_line = l
+where = w
+field_separator = F
+line_separator = L
+
+
+[misc_shortcuts]
+
+edit = e
+line_numbers  = n
+redo = r
+undo = u
+search = /
+search_next = n
+search_previous = p
+help = ?
+quit = q
+
+
+[quit_shortcuts]
+
+abort = a
+data = d
+script = s
+print = p
+quit = q
+
+[ac]
+#~ advanced commands
+
+append_field = a
+count = c
+histogram = h
+insert = i
+mean = m
+padding = p
+auto_padding = P
+sum = s
+transpose = t

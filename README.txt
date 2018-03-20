@@ -399,3 +399,8 @@ Just compute the sum of a field, empty lines are automatically replaced by 0.
 }}}
 
 Why it is not 10? Because line 3 is empty.
+
+
+===== Custom =====
+
+All shortcuts are cutomisable, just copy the default conf.rc in "~/.config/pawk/conf.rc" and modify it as you want.
