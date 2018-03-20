@@ -379,26 +379,28 @@ We can also display an histogram 'h'. Field one must contain the labels, and fie
 
 
 === Sum ===
+
+When we use sum 's', a new field is created.
 {{{code: lang="html" linenumbers="True"
-10
-10
-
-10
-10
-}}}
-
-Just compute the sum of a field, empty lines are automatically replaced by 0.
-{{{code: lang="html" linenumbers="False"
-40
+/bin/bash:5:60
+/bin/false:34:60
+/bin/sh:2:60
+/bin/sync:1:60
+/usr/sbin/nologin:18:60
 }}}
 
 
 === Mean ===
-{{{code: lang="html" linenumbers="False"
-8.0000000000
+
+The same with mean' m'.
+{{{code: lang="html" linenumbers="True"
+/bin/bash:5:60:12
+/bin/false:34:60:12
+/bin/sh:2:60:12
+/bin/sync:1:60:12
+/usr/sbin/nologin:18:60:12
 }}}
 
-Why it is not 10? Because line 3 is empty.
 
 
 ===== Custom =====

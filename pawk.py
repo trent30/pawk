@@ -924,14 +924,10 @@ def histogram():
 	call_pipe("awk '%s'" % (get_script("histogram.awk") % awk_begin("l=0;") ) )
 	
 def sum_( f ):
-	call_pipe("awk '%s{ print $%s }' | sed 's/^$/0/g' | awk 'BEGIN{RS=\"%s\";ORS=\"%s\"}{if (RT==\"\") printf \"%%s\",$0; else print}' | sed \"s/+$/\\n/g\" | bc" % (awk_begin(), f, "\\n", "+") )
+	call_pipe("awk '%s'" % (get_script("sum.awk") % ( awk_begin(), f) ) )
 	
 def mean( f ):
-	global CMD_LIST
-	pre_list = cmd_list_to_pipe(CMD_LIST)
-	sum_( f )
-	cmd = "tr '\\n' '/' |  xargs -I'{}' echo \"scale=10;\"{}$(%s) | bc " % ( pre_list + " | wc -l")
-	call_pipe(cmd)
+	call_pipe("awk '%s'" % (get_script("mean.awk") % ( awk_begin(), f) ) )
 	
 def call_pipe(cmd):
 	global SHOW_LINE_NUMBERS
