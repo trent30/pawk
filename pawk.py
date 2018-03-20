@@ -845,6 +845,8 @@ def advanced_commands():
 	%s : histogram
 	%s : insert the line number on the first field
 	%s : compute the mean
+	%s : maximum value
+	%s : minimum value
 	%s : padding
 	%s : auto padding all fields
 	%s : sum values on selected field
@@ -856,6 +858,8 @@ def advanced_commands():
 	CONFIG.get('ac', 'histogram'), \
 	CONFIG.get('ac', 'insert'), \
 	CONFIG.get('ac', 'mean'), \
+	CONFIG.get('ac', 'max'), \
+	CONFIG.get('ac', 'min'), \
 	CONFIG.get('ac', 'padding'), \
 	CONFIG.get('ac', 'auto_padding'), \
 	CONFIG.get('ac', 'sum'), \
@@ -899,6 +903,20 @@ def advanced_commands():
 			mean( f[0] )
 			return
 		
+		if c == ord(CONFIG.get('ac', 'max')):
+			f = fields(1)
+			if len( f ) == 0:
+				return
+			max_( f[0] )
+			return
+		
+		if c == ord(CONFIG.get('ac', 'min')):
+			f = fields(1)
+			if len( f ) == 0:
+				return
+			min_( f[0] )
+			return
+		
 		if c == ord(CONFIG.get('ac', 'padding')):
 			f = fields(1)
 			if len( f ) == 0:
@@ -928,6 +946,12 @@ def sum_( f ):
 	
 def mean( f ):
 	call_pipe("awk '%s'" % (get_script("mean.awk") % ( awk_begin(), f) ) )
+	
+def max_( f ):
+	call_pipe("awk '%s'" % (get_script("max.awk") % ( awk_begin(), f, ">") ) )
+	
+def min_( f ):
+	call_pipe("awk '%s'" % (get_script("max.awk") % ( awk_begin(), f, "<") ) )
 	
 def call_pipe(cmd):
 	global SHOW_LINE_NUMBERS
