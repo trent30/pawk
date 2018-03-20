@@ -969,9 +969,6 @@ def count(lst):
 
 def sort():
 	global FS
-	split = "e3e5f8d6e6fd4fb79"
-	while split in DATA_LIST[ -1 ]:
-		split += split
 	columns = ""
 	lst = fields()
 	msg = """
@@ -988,10 +985,10 @@ sort options :
 	if len(lst) > 0:
 		for i in lst:
 			columns += '$%i" "' % i
-		columns += '"%s"$0' % split
+		columns += '"%s"$0' % FS
 		cmd = "awk '%s{ print %s }'" % (awk_begin(), columns)
-		cmd += "|sort %s" % TextBoxInput(msg)
-		cmd += '|sed "s/^.*%s//g"' % split
+		cmd += "| sort %s" % TextBoxInput(msg)
+		cmd += "| awk '%s'" % ( get_script("remove_first_field.awk") % awk_begin() )
 		call_pipe(cmd)
 	fill_screen(DATA_LIST[ -1 ], SHOW_LINE_NUMBERS)
 
