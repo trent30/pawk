@@ -800,16 +800,7 @@ def insert_line_number():
 	call_pipe("awk '%s{print n\"%s\"$0; n++}'" % (awk_begin("n=1;"), FS) )
 
 def transpose():
-	global CMD_LIST
-	pre_list = cmd_list_to_pipe(CMD_LIST)
-	cmd = "head -n 1 | awk 'BEGIN{RS=\"%s\";ORS=\"%s\"}{if (RT==\"\") printf \"%%s\",$0; else print}' | wc -l | for n in $(seq $( xargs )); do %s | cut --delimiter=\"%s\" -f$n | awk 'BEGIN{RS=\"%s\";ORS=\"%s\"}{if (RT==\"\") printf \"%%s\",$0; else print}'; echo ""; done" % \
-		( escape_rs(FS, True), \
-		escape_rs(RS, True), \
-		pre_list, \
-		escape_rs(FS, True), \
-		escape_rs(RS, True), \
-		escape_rs(FS, True))
-	call_pipe(cmd)
+	call_pipe("awk '%s'" % ( get_script("transpose.awk") % awk_begin() ) )
 
 def padding(l):
 	l2 = lst2colums( [i + 1 for i in xrange(count_fields(DATA_LIST[ -1 ]) ) ] )
