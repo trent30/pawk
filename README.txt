@@ -392,7 +392,7 @@ When we use sum 's', a new field is created.
 
 === Mean ===
 
-The same with mean' m'.
+The same with mean 'm' on field 2.
 {{{code: lang="html" linenumbers="True"
 /bin/bash:5:60:12
 /bin/false:34:60:12
@@ -402,7 +402,35 @@ The same with mean' m'.
 }}}
 
 
+=== Maximum ===
 
-===== Custom =====
+The same with maximum 'M' on field 2.
+{{{code: lang="html" linenumbers="True"
+/bin/bash:5:60:12:34
+/bin/false:34:60:12:34
+/bin/sh:2:60:12:34
+/bin/sync:1:60:12:34
+/usr/sbin/nologin:18:60:12:34
+}}}
+
+
+=== Minimum ===
+
+The same with maximum 'n' on field 2.
+{{{code: lang="html" linenumbers="True"
+/bin/bash:5:60:12:34:1
+/bin/false:34:60:12:34:1
+/bin/sh:2:60:12:34:1
+/bin/sync:1:60:12:34:1
+/usr/sbin/nologin:18:60:12:34:1
+}}}
+
+
+===== Custom command =====
+
+Despite all the previous preconfigured commands, you can "insert a custom command" with 'i'.
+
+
+===== Custom shortcuts =====
 
 All shortcuts are cutomisable, just copy the default conf.rc in "~/.config/pawk/conf.rc" and modify it as you want.
