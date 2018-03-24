@@ -951,12 +951,8 @@ def call_pipe(cmd):
 	DATA_LIST.append(d)
 	fill_screen(DATA_LIST[ -1 ], SHOW_LINE_NUMBERS)
 
-def count(lst):
-	global CMD_LIST
-	pre_list = cmd_list_to_pipe(CMD_LIST) + " | awk '%s{ print $%s }'" % (awk_begin(), lst )
-	cmd = "awk '%s{ print $%s }' | sort | uniq | for i in $(xargs -0); do echo -n $i\"%s\" ; %s | grep $i | wc -l; done" \
-		% (awk_begin(), lst, escape_rs(FS, True), pre_list)
-	call_pipe(cmd)
+def count( f ):
+	call_pipe("awk '%s'" % (get_script("count.awk") % ( awk_begin("f=%i;" % f)) ) )
 
 def sort():
 	global FS
