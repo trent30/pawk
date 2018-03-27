@@ -4,7 +4,7 @@
 import curses
 import os
 import sys
-import curses.textpad
+import textpad
 import subprocess
 import copy
 import stat
@@ -22,6 +22,7 @@ RS = "\n"
 SHOW_LINE_NUMBERS = False
 OFFSET_X = 1
 OFFSET_Y = 1
+HISTORY = []
 
 SCRIPT_PATH = os.path.join( os.path.dirname(sys.argv[0]), "scripts", "" )
 CONFIG = ConfigParser.RawConfigParser()
@@ -343,13 +344,22 @@ def call_external_command(command, data):
 def TextBoxInput(m1):
 	global MAX_X
 	global MAX_Y
+	global HISTORY
 	grep_win = print_win( m1 )
 	win = curses.newwin(1, MAX_X, MAX_Y - 1, 0)
-	tb = curses.textpad.Textbox(win)
-	text = tb.edit()
+	tb = textpad.Textbox(win, history=HISTORY)
+	text = tb.edit()[ : -1 ]
+	
+	if len(HISTORY) > 0:
+		if HISTORY[ -1 ] != text:
+			# Don't append if the previous value is the same
+			HISTORY.append(text)
+	else:
+		HISTORY.append(text)
+	
 	destroy_window(grep_win)
 	destroy_window(win)
-	return text[ : -1 ]
+	return text
 
 def popup( msg ):
 	popup = print_win([msg])
