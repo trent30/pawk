@@ -1,3 +1,8 @@
+[global]
+
+save_history = 1
+
+
 [main_shortcuts]
 
 advanced_commands = a

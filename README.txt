@@ -1,3 +1,6 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+
 ====== pawk ======
 
 
@@ -434,3 +437,8 @@ Despite all the previous preconfigured commands, you can "insert a custom comman
 ===== Custom shortcuts =====
 
 All shortcuts are cutomisable, just copy the default conf.rc in "~/.config/pawk/conf.rc" and modify it as you want.
+
+
+===== History =====
+
+By default, all inputs are saved in "~/.config/pawk/history" and you can navigate with UP and DOWN arrow. If you don't want history, just change the save_history option in "conf.rc".

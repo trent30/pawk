@@ -23,13 +23,17 @@ SHOW_LINE_NUMBERS = False
 OFFSET_X = 1
 OFFSET_Y = 1
 HISTORY = []
+HISTORY_PATH = ""
 
 SCRIPT_PATH = os.path.join( os.path.dirname(sys.argv[0]), "scripts", "" )
 CONFIG = ConfigParser.RawConfigParser()
 
+def home_dir():
+	return os.path.join( os.path.expanduser('~'), ".config", "pawk", "" )
+	
 def read_conf():
 	global CONFIG
-	path = os.path.join( os.path.expanduser('~'), ".config", "pawk", "" ) + "conf.rc"
+	path = home_dir() + "conf.rc"
 	if os.path.isfile( path ):
 		CONFIG.read(path)
 	else:
@@ -98,12 +102,29 @@ def print_help():
 	fill_screen( DATA_LIST[ -1 ])
 	
 def quit_curses():
+	if CONFIG.get('global', 'save_history') == "1":
+		save_history()
 	curses.nocbreak()
 	stdscr.keypad(0)
 	curses.echo()
 	curses.endwin()
 	stdscr.clear()
 
+def load_history():
+	global HISTORY
+	path = home_dir() + "history"
+	if os.path.exists(path):
+		fd = open(path)
+		HISTORY = [ i.replace('\n','') for i in fd.readlines() ]
+		fd.close()
+	
+def save_history():
+	global HISTORY
+	fd = open( home_dir() + "history", "a+" )
+	for i in HISTORY:
+		fd.write( i + '\n')
+	fd.close()
+	
 def quit_menu():
 	global DATA_LIST
 	global CONFIG
@@ -1027,6 +1048,7 @@ def main_function(arg):
 	global CONFIG
 	
 	read_conf()
+	load_history()
 	update_maxyx()
 	fill_screen(DATA_LIST[0])
 	
