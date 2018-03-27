@@ -87,11 +87,15 @@ class Textbox:
                     self.win.move(backy, backx)
     
     def history_next(self):
+        if len(self.history) == 0:
+            return 
         if self.offset_history < self.len_history - 1:
             self.offset_history += 1
         return self.history[self.offset_history]
     
     def history_previous(self):
+        if len(self.history) == 0:
+            return 
         if self.offset_history > 0:
             self.offset_history -= 1
         return self.history[self.offset_history]
