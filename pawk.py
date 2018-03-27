@@ -120,7 +120,7 @@ def load_history():
 	
 def save_history():
 	global HISTORY
-	fd = open( home_dir() + "history", "a+" )
+	fd = open( home_dir() + "history", "w" )
 	for i in HISTORY:
 		fd.write( i + '\n')
 	fd.close()
