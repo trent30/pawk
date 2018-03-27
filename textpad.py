@@ -2,6 +2,7 @@
 
 import curses
 import curses.ascii
+import os
 
 def rectangle(win, uly, ulx, lry, lrx):
     """Draw a rectangle with corners at the provided upper-left
@@ -91,6 +92,46 @@ class Textbox:
             self.offset_history += 1
         return self.history[self.offset_history]
     
+    def listdir(self, p):
+        src = os.path.split(p)[0]
+        r  = []
+        r2 = []
+        try:
+            r = os.listdir(p)
+            src = p
+        except:
+            try:
+                r = os.listdir( src )
+            except:
+                return []
+            f = os.path.split(p)[1]
+            l = len(f)
+            for i in r:
+                if i[:l] == f:
+                    r2.append(src + os.sep + i)
+        else:
+            for i in r:
+                r2.append(src + os.sep + i)
+        return r2
+        
+    def completion(self):
+        (y, x) = self.win.getyx()
+        t = self.gather().replace("\n", "")
+        r = ""
+        if len(t) > 0:
+            if " " in t:
+                r = t.split().pop()
+            else:
+                r = t
+        else:
+            return
+        c = self.listdir( r )
+        if len(c) > 0:
+            self.win.move(y, 0)
+            self.win.clrtoeol()
+            for i in c[0]:
+                self.win.addch(i)
+    
     def history_previous(self):
         if self.offset_history > 0:
             self.offset_history -= 1
@@ -156,12 +197,17 @@ class Textbox:
             
         elif ch == curses.ascii.SI:                            # ^o
             self.win.insertln()
+            
         elif ch in (curses.ascii.DLE, curses.KEY_UP):          # ^p
              if self.len_history > 0:
                 self.win.move(y, 0)
                 self.win.clrtoeol()
                 for i in self.history_previous():
                     self.win.addch(i)
+            
+        elif ch == ord('\t'):                                  # completion
+            self.completion()
+        
         return 1
 
     def gather(self):
