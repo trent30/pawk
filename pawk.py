@@ -559,8 +559,9 @@ def fields(limit=0, msg=[]):
 		paint_field(stdscr, d - shift_x, d, f, data )
 		statusBar("Column : %i | Actuals fields are : %s | a : append | r : remove last one | m : manually | %s : field separator | %s : quit" % ( \
 			actual_column, str(lst), \
+			CONFIG.get('awk_shortcuts', 'field_separator'), \
 			CONFIG.get('misc_shortcuts', 'quit'), \
-			CONFIG.get('awk_shortcuts', 'field_separator')) )
+			) )
 		
 		if cpt == 0 and len(msg) > 0:
 			print_win(msg)
@@ -571,7 +572,7 @@ def fields(limit=0, msg=[]):
 			lst.append( actual_column )
 			actual_column += 1
 		
-		if c == ord('F'):
+		if c == ord(CONFIG.get('awk_shortcuts', 'field_separator')):
 			new_field_separator()
 			data, meta = tab_view(DATA_LIST[ -1 ])
 			
