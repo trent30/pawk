@@ -29,7 +29,10 @@ SCRIPT_PATH = os.path.join( os.path.dirname(sys.argv[0]), "scripts", "" )
 CONFIG = ConfigParser.RawConfigParser()
 
 def home_dir():
-	return os.path.join( os.path.expanduser('~'), ".config", "pawk", "" )
+	hd = os.path.join( os.path.expanduser('~'), ".config", "pawk", "" )
+	if not os.path.exists(hd):
+		os.mkdir(hd)
+	return hd
 	
 def read_conf():
 	global CONFIG
