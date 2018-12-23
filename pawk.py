@@ -1082,6 +1082,10 @@ def main_function(arg):
 		if c == ord(CONFIG.get('misc_shortcuts', 'help')):
 			print_help()
 			
+		if c == ord(CONFIG.get('misc_shortcuts', 'eof')):
+			OFFSET_Y = len(DATA_LIST[ -1 ].split(escape_rs( RS ) ) ) - 1
+			fill_screen(DATA_LIST[ -1 ], SHOW_LINE_NUMBERS)
+			
 		if c == ord(CONFIG.get('main_shortcuts', 'custom_command')):
 			r = TextBoxInput(["External command"])
 			if r != "":

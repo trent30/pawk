@@ -53,6 +53,7 @@ python pawk.py [FILE...]
 	u : undo
 	/ : search
 	? : print this help message
+	G : go to end of file
 	q : quit
 '''
 
