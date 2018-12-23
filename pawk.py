@@ -1145,6 +1145,10 @@ def main_function(arg):
 		if c == ord(CONFIG.get('awk_shortcuts', 'where')):
 			where()
 		
+		if c == curses.KEY_HOME:
+			OFFSET_Y = 1
+			fill_screen(DATA_LIST[ -1 ], SHOW_LINE_NUMBERS)
+		
 		if c == curses.KEY_NPAGE:
 			n = OFFSET_Y + MAX_Y - 1
 			if n < len(DATA_LIST[ -1 ].split(escape_rs( RS ) ) ):
