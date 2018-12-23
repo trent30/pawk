@@ -357,13 +357,12 @@ def call_awk(command, arg, data):
 def call_external_command(command, data):
 	try:
 		p = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=False)
-		p.stdin.write(data)
+		return p.communicate(data)[0]
 	except:
 		print_win(["%s fail" % command])
 		c = stdscr.getch()
-		return None
-	else:
-		return p.communicate()[0]
+	return None
+		
 
 def TextBoxInput(m1):
 	global MAX_X
